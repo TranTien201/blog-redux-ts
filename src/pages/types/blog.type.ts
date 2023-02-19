@@ -9,4 +9,6 @@ export interface Post {
 export interface PostState {
   postList: Post[]
   editingPost: Post | null
+  loading: boolean
+  currentRequestId: undefined | string
 }

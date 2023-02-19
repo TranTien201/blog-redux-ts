@@ -1,12 +1,14 @@
 import { Post } from 'pages/types/blog.type'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import blogReducer from 'redux/reducers/blog.reducer'
+import { useSelector } from 'react-redux'
+import blogReducer, { addPost, updatePost } from 'redux/reducers/blog.reducer'
 import { postDefault } from 'constants/blog'
-import { blogSelectedEditor } from 'redux/selectors/blog.selector'
+import { blogLoading, blogSelectedEditor } from 'redux/selectors/blog.selector'
+import { useAppDispatch } from 'redux/store'
 const CreatePost = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const editingPost = useSelector(blogSelectedEditor)
+  const loading = useSelector(blogLoading)
   const [formData, setFormData] = useState<Post>(postDefault)
   useEffect(() => {
     setFormData(editingPost || postDefault)
@@ -15,12 +17,12 @@ const CreatePost = () => {
   const handelSubmitPost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (editingPost) {
-      dispatch(blogReducer.actions.updatePost(formData))
+      dispatch(updatePost(formData))
     } else {
       const formDataSetDate = { ...formData, publishDate: new Date().toLocaleString() }
-      dispatch(blogReducer.actions.addPost(formDataSetDate))
+      dispatch(addPost(formDataSetDate))
     }
-    dispatch(blogReducer.actions.cancelEditPost())
+    setFormData(postDefault)
   }
   // Cancel Editing
   const handelCancelEdit = () => {

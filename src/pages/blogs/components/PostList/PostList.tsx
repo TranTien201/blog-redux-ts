@@ -1,19 +1,29 @@
 import PostItem from '../PostItem/PostItem'
-import { useSelector, useDispatch } from 'react-redux'
-import { blogListSelector } from 'redux/selectors/blog.selector'
-import blogReducer from 'redux/reducers/blog.reducer'
+import { useSelector } from 'react-redux'
+import { blogListSelector, blogLoading } from 'redux/selectors/blog.selector'
+import blogReducer, { deletePost, getPostList } from 'redux/reducers/blog.reducer'
 import { useEffect } from 'react'
-import service from 'utils/http'
+import { useAppDispatch } from 'redux/store'
+import Skeleton from '../Skeleton'
 const PostList = () => {
   const postList = useSelector(blogListSelector)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const loading = useSelector(blogLoading)
+  useEffect(() => {
+    const promise = dispatch(getPostList())
+    // Clearn up function
+    return () => {
+      promise.abort()
+    }
+  }, [dispatch])
+
   const handelDeletePost = (postID: string) => {
-    dispatch(blogReducer.actions.deletePost(postID))
+    dispatch(deletePost(postID))
   }
+
   const handelEditPost = (postID: string) => {
     dispatch(blogReducer.actions.editPost(postID))
   }
-  useEffect(() => {}, [dispatch])
 
   return (
     <div className='bg-white py-6 sm:py-8 lg:py-12'>
@@ -25,9 +35,16 @@ const PostList = () => {
           </p>
         </div>
         <div className='grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-2 xl:grid-cols-2 xl:gap-8'>
-          {postList.map((post) => (
-            <PostItem key={post.id} post={post} deletePost={handelDeletePost} editPost={handelEditPost} />
-          ))}
+          {loading ? (
+            <>
+              <Skeleton></Skeleton>
+              <Skeleton></Skeleton>
+            </>
+          ) : (
+            postList.map((post) => (
+              <PostItem key={post.id} post={post} deletePost={handelDeletePost} editPost={handelEditPost} />
+            ))
+          )}
         </div>
       </div>
     </div>
