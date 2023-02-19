@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Lộ trình học Front-end",
+      "description": "Lập trình viên Front-end là người xây dựng ra giao diện websites. Trong phần này F8 sẽ chia sẻ cho bạn lộ trình để trở thành lập trình viên Front-end nhé.",
+      "publishDate": "18/2/2022 17:15:23",
+      "featuredImage": "https://files.fullstack.edu.vn/f8-prod/learning-paths/2/63b4642136f3e.png",
+      "published": true
+    }
+  ]
+}

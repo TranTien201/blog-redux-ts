@@ -2,6 +2,8 @@ import PostItem from '../PostItem/PostItem'
 import { useSelector, useDispatch } from 'react-redux'
 import { blogListSelector } from 'redux/selectors/blog.selector'
 import blogReducer from 'redux/reducers/blog.reducer'
+import { useEffect } from 'react'
+import service from 'utils/http'
 const PostList = () => {
   const postList = useSelector(blogListSelector)
   const dispatch = useDispatch()
@@ -11,6 +13,8 @@ const PostList = () => {
   const handelEditPost = (postID: string) => {
     dispatch(blogReducer.actions.editPost(postID))
   }
+  useEffect(() => {}, [dispatch])
+
   return (
     <div className='bg-white py-6 sm:py-8 lg:py-12'>
       <div className='mx-auto max-w-screen-xl px-4 md:px-8'>
