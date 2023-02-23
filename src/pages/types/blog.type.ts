@@ -11,4 +11,12 @@ export interface PostState {
   editingPost: Post | null
   loading: boolean
   currentRequestId: undefined | string
+  search: string
+  publish: boolean
+}
+
+export interface SearchState {
+  searchTitle: string
+  searchDescription: string
+  isPublic: boolean
 }

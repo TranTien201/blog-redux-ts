@@ -11,7 +11,9 @@ const initialState: PostState = {
   postList: [],
   editingPost: null,
   loading: false,
-  currentRequestId: undefined
+  currentRequestId: undefined,
+  search: '',
+  publish: false
 }
 const blogReducer = createSlice({
   name: 'blogs',
@@ -65,7 +67,7 @@ const blogReducer = createSlice({
       .addMatcher<RejectedAction>(
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
-          console.log(action.meta.requestId)
+          // console.log(action.meta.requestId)
           if (state.loading && state.currentRequestId === action.meta.requestId) {
             state.loading = false
             state.currentRequestId = undefined
@@ -75,7 +77,7 @@ const blogReducer = createSlice({
       .addMatcher<FulfilledAction>(
         (action) => action.type.endsWith('/fulfilled'),
         (state, action) => {
-          console.log(action.meta.requestId)
+          // console.log(action.meta.requestId)
           if (state.loading && state.currentRequestId === action.meta.requestId) {
             state.loading = false
             state.currentRequestId = undefined

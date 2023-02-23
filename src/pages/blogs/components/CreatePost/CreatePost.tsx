@@ -1,7 +1,7 @@
 import { Post } from 'pages/types/blog.type'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import blogReducer, { addPost, updatePost } from 'redux/reducers/blog.reducer'
+import blogReducer, { addPost, updatePost } from 'redux/reducers/blog/blog.reducer'
 import { postDefault } from 'constants/blog'
 import { blogLoading, blogSelectedEditor } from 'redux/selectors/blog.selector'
 import { useAppDispatch } from 'redux/store'
