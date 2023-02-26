@@ -42,7 +42,7 @@ const PostList = () => {
       clearTimeout(timeOutRef.current)
     }
     timeOutRef.current = setTimeout(() => {
-      dispatch(filterBlogReducer.actions.searchTitle(e.target.value))
+      dispatch(filterBlogReducer.actions.searchText(e.target.value))
     }, 500)
   }
   return (
@@ -57,16 +57,17 @@ const PostList = () => {
         <Row style={{ marginBottom: '10px' }}>
           <Col span={24}>
             <Input.Group style={{ display: 'flex' }} compact>
-              <Input value={search.text} onChange={handelSearchText} />
+              <Input value={search.text} onChange={handelSearchText} disabled={loading} />
               <Select
                 // defaultValue={tag}
                 value={search.tag}
-                onChange={(value) =>
+                onChange={(value) => {
                   setSearch({
                     ...search,
                     tag: value
                   })
-                }
+                  dispatch(filterBlogReducer.actions.changeTag(value))
+                }}
               >
                 <Select.Option value='title' label='Title'>
                   <Tag color='red'>Title</Tag>
@@ -86,6 +87,7 @@ const PostList = () => {
               className='h-4 w-4 focus:ring-2 focus:ring-blue-500'
               checked={isPublish}
               onChange={() => dispatch(filterBlogReducer.actions.changePublic())}
+              disabled={loading}
             />
             <label htmlFor='publish' className='ml-2 text-sm font-medium text-gray-900'>
               Publish

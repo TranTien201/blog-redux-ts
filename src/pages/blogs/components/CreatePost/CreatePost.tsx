@@ -5,6 +5,7 @@ import blogReducer, { addPost, updatePost } from 'redux/reducers/blog/blog.reduc
 import { postDefault } from 'constants/blog'
 import { blogLoading, blogSelectedEditor } from 'redux/selectors/blog.selector'
 import { useAppDispatch } from 'redux/store'
+import Loading from '../Loading'
 const CreatePost = () => {
   const dispatch = useAppDispatch()
   const editingPost = useSelector(blogSelectedEditor)
@@ -139,6 +140,8 @@ const CreatePost = () => {
               </span>
             </button>
           </>
+        ) : loading ? (
+          <Loading />
         ) : (
           <button
             className='relativemb-2 group mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 dark:text-white dark:focus:ring-blue-800'

@@ -5,6 +5,7 @@ export interface Post {
   publishDate: string
   featuredImage: string
   published: boolean
+  [key: string]: number | string | boolean
 }
 export interface PostState {
   postList: Post[]
@@ -16,7 +17,7 @@ export interface PostState {
 }
 
 export interface SearchState {
-  searchTitle: string
-  searchDescription: string
+  text: string
+  tag: string
   isPublic: boolean
 }
