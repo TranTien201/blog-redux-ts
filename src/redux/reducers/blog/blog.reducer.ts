@@ -15,6 +15,27 @@ const initialState: PostState = {
   search: '',
   publish: false
 }
+const CACHE_TTL: number = 300000
+
+interface CacheEntry<T> {
+  timestamp: number
+  value: T
+}
+
+const cache: Record<string, CacheEntry<any>> = {}
+
+const getFromCache = <T>(key: string): T | undefined => {
+  const entry = cache[key]
+  if (entry && Date.now() - entry.timestamp < CACHE_TTL) {
+    return entry.value as T
+  }
+  delete cache[key]
+}
+
+const addToCache = <T>(key: string, value: T) => {
+  cache[key] = { timestamp: Date.now(), value }
+}
+
 const blogReducer = createSlice({
   name: 'blogs',
   initialState,
@@ -37,9 +58,11 @@ const blogReducer = createSlice({
     builder
       .addCase(getPostList.fulfilled, (state, action) => {
         state.postList = action.payload
+        addToCache('postList', action.payload)
       })
       .addCase(addPost.fulfilled, (state, action) => {
         state.postList.push(action.payload)
+        addToCache('postList', state.postList)
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         state.postList.find((post, index) => {
@@ -50,12 +73,14 @@ const blogReducer = createSlice({
           return false
         })
         state.editingPost = null
+        addToCache('postList', state.postList)
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         const postID = state.postList.findIndex((post) => post.id === action.payload)
         if (postID !== -1) {
           state.postList.splice(postID, 1)
         }
+        addToCache('postList', state.postList)
       })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),
@@ -88,6 +113,10 @@ const blogReducer = createSlice({
 })
 
 export const getPostList = createAsyncThunk('blogs/getPostList', async (_, thunkAPI) => {
+  const getCacheData = getFromCache<Post[]>('postList')
+  if (getCacheData) {
+    return getCacheData
+  }
   const response = await service.getAPI<Post[]>('posts', {
     signal: thunkAPI.signal
   })
